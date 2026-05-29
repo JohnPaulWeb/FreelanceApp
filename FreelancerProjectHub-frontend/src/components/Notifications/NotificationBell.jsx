@@ -6,7 +6,8 @@ import proposalService from "../../services/proposalService";
 import { FaBell } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || "http://localhost:5000";
+// Connect to backend WebSocket server
+const SOCKET_URL = "http://localhost:5001";
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);

@@ -27,7 +27,14 @@ const PORT = process.env.PORT || 5001;
 
 // Define your allowed origins for both CORS and Socket.IO
 const allowedOrigins = [
-  'http://51.20.85.41', // Your EC2 Public IP
+  'http://localhost:5173',      // Local development
+  'http://localhost:5174',      // Local development
+  'http://localhost:5175',      // Local development
+  'http://localhost:3000',      // Local development alternative
+  'http://127.0.0.1:5173',      // Local development
+  'http://127.0.0.1:5174',      // Local development
+  'http://127.0.0.1:5175',      // Local development
+  'http://51.20.85.41',         // Your EC2 Public IP
   // You can add your domain name here later if you get one
   // 'http://www.yourdomain.com'
 ];
@@ -38,6 +45,7 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) === -1) {
+      console.warn(`⚠️  CORS blocked origin: ${origin}`);
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }

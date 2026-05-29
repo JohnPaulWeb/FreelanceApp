@@ -1,0 +1,7 @@
+Client Account:
+Email: testuser@example.com
+Password: TestPassword123!
+
+Freenlancer Account:
+Email: testuser@example.com
+Password: TestPassword123!

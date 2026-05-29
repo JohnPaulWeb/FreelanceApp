@@ -4,8 +4,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+// Use relative API path so Vite proxy can forward to backend
 const apiClient = axios.create({
-  baseURL: '/api/auth', 
+  baseURL: '/api/auth',
+  withCredentials: true,
 });
 
 const Signup = () => {
@@ -28,12 +30,20 @@ const Signup = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await apiClient.post('/signup', formData);
-      toast.success('An OTP has been sent to your email for verification.');
+      const response = await apiClient.post('/signup', formData);
+      toast.success('Account created! Check your email for the OTP.');
       
-      navigate('/verify', { state: { email: formData.email } }); 
+      // Pass OTP if available (development mode)
+      navigate('/verify', { 
+        state: { 
+          email: formData.email,
+          otp: response.data.otp // OTP from backend (dev mode only)
+        } 
+      });
     } catch (error) {
-      toast.error(error.response?.data?.msg || 'Failed to sign up. This email might already be in use.');
+      console.error('Signup error:', error);
+      const errorMsg = error.response?.data?.msg || error.message || 'Failed to sign up. Please try again.';
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +145,7 @@ const Signup = () => {
           </button>
         </form>
 
-
+        
         <div className='text-center'>
           <p className='text-sm text-gray-600'>Already have an account? {' '}
             <Link to="/login" className='font-semibold text-indigo-600 hover:underline'>Login Here</Link>

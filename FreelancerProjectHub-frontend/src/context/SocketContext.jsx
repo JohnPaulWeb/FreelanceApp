@@ -11,15 +11,24 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket =io({
+    const socketURL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5001';
+    const newSocket = io(socketURL, {
       auth: {
         token: localStorage.getItem('token')
-      }
+      },
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5
     });
 
     setSocket(newSocket);
 
-    return () => newSocket.close();
+    return () => {
+      newSocket.off('connect');
+      newSocket.off('disconnect');
+      newSocket.close();
+    };
   }, []);
 
   return (

@@ -4,8 +4,10 @@ import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 
+// Use relative API path so Vite proxy can forward to backend
 const apiClient = axios.create({
   baseURL: '/api/auth',
+  withCredentials: true,
 });
 
 const Login = () => {
